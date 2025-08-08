@@ -13,7 +13,8 @@ import Footer from "../../Components/Footer";
 import Navbar from "./../../Components/Navbar";
 
 function ClientProfile() {
-  const ClientEmail = JSON.parse(localStorage.getItem("loggedUser")).email;
+  const ClientEmail = JSON.parse(localStorage.getItem("loggedUser") || "null")?.email ||
+  "https://www.google.com";
   const location = useLocation();
   const userprofile = location.state?.user || {};
   const {
@@ -123,3 +124,4 @@ function ClientProfile() {
 }
 
 export default ClientProfile;
+
