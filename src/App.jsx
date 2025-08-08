@@ -10,6 +10,7 @@ import { useContext } from "react";
 import { ThemeContext } from "./Contexts/ThemeContext";
 
 function App() {
+   localStorage.clear();
   const { theme, toggleTheme } = useContext(ThemeContext);
 
   useEffect(() => {
