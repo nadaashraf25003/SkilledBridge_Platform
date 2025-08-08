@@ -12,7 +12,8 @@ import { useLocation } from "react-router-dom";
 import Navbar from "../../Components/Navbar";
 
 function FreelancerProfile() {
-  const FreelancerEmail = JSON.parse(localStorage.getItem("loggedUser")).email;
+  const FreelancerEmail = JSON.parse(localStorage.getItem("loggedUser") || "null")?.email ||
+  "https://www.google.com";
   const location = useLocation();
   const userprofile = location.state?.user || {};
   const {
@@ -94,3 +95,4 @@ function FreelancerProfile() {
   );
 }
 export default FreelancerProfile;
+
