@@ -123,7 +123,8 @@ src/
 │   ├── Register.jsx
 │   └── TermsOdService.jsx
 │
-├── App.jsx                       # Root component
+├── ScrollToTop.jsx                     
+├─  App.jsx                       # Root component
 └── main.jsx                      # Entry point
 ```
 
@@ -137,7 +138,9 @@ src/
 │   │   │   └── RouterProvider (App Router)
 │   │   │       └── App.jsx (Layout)
 │   │   │           ├── Outlet (Dynamic Pages)
-│   │   │           └── BackToTopButton
+│   │   │           ├── ScrollToTop 
+│   │   │           ├──  BackToTopButton 
+│   │   │           └──Theme-switcher
 │   │   │
 │   │   └── Contexts/
 │   │       ├── AuthContext.jsx
