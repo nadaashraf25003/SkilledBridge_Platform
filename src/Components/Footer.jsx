@@ -17,7 +17,7 @@ function Footer() {
                 <span className="logo-icon">
                   <i className="fas fa-handshake" />
                 </span>
-                <span className="logo-text" id="footer-logo" style={{color:"red"}}>SkilledBridge</span>
+                <span className="logo-text">SkilledBridge</span>
               </div>
               <p className="footer-about mt-3">
                 SkillBridge connects businesses with top freelance talent
@@ -149,3 +149,4 @@ function Footer() {
 }
 
 export default Footer;
+
