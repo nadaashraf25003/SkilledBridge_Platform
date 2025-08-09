@@ -24,7 +24,10 @@ function Register() {
         /^[A-Za-z\s]+$/,
         "Name should not contain numbers or special characters"
       ),
-    email: string().required("Email is required").email("Enter a valid email").matches(".@"),
+    email: string()
+      .required("Email is required")
+      .email("Enter a valid email")
+      .matches(".@"),
     password: string()
       .required("Password is required")
       .min(6, "Password must be at least 6 characters")
@@ -51,6 +54,27 @@ function Register() {
     try {
       await userSchema.validate(userData, { abortEarly: false });
       setErrors({});
+
+      const checkExistEmail = (email) => {
+        for (let i = 0; i < localStorage.length; i++) {
+          const key = localStorage.key(i);
+          try {
+            const user = JSON.parse(localStorage.getItem(key));
+            if (user?.email === email) {
+              return true;
+            }
+          } catch (err) {
+            console.error(err);
+          }
+        }
+        return false;
+      };
+
+      if (checkExistEmail(userData.email)) {
+        alert("This email already exists");
+        setErrors({ email: "This email already exists" });
+        return;
+      }
 
       // Generate a unique ID
       const userID = `User${Date.now().toString()}`;
