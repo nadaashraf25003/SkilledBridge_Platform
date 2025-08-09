@@ -51,7 +51,6 @@ function Login() {
         localStorage.setItem("loggedUser", JSON.stringify(info));
         alert("Login successful! Welcome to our website");
         e.target.reset();
-        window.location.reload(); // Reload the page to update the UI
         setTimeout(() => navigate("/"), 2000);
         log(true);
         break;
@@ -162,3 +161,4 @@ function Login() {
 }
 
 export default Login;
+
