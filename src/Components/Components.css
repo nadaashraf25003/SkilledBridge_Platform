@@ -1,17 +1,10 @@
 /* ===== Navbar ===== */
-.navbar {
+:root {
   --navbar-bg: rgba(255, 255, 255, 0.9);
   --navbar-scrolled-bg: rgba(255, 255, 255, 0.95);
   --navbar-text: #3f37c9;
   --navbar-hover: #4361ee;
   --navbar-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  padding: 0.8rem 1rem;
-  transition: all 0.3s ease;
-  background: var(--navbar-bg);
-  position: sticky;
-  top: 0;
-  z-index: 1030;
 }
 
 .navbar.scrolled {
@@ -444,3 +437,15 @@ body.dark .footer-divider {
   background-clip: text;
   color: transparent !important;
 }
+/* .footer .container .row .logo-text {
+  background: linear-gradient(to right, var(--navbar-hover), #4cc9f0) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text;
+  color: transparent !important;
+}
+#footer-logo{
+  background: linear-gradient(to right, var(--navbar-hover), #4cc9f0) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text;
+  color: transparent !important;
+} */
