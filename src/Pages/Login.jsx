@@ -51,8 +51,8 @@ function Login() {
         localStorage.setItem("loggedUser", JSON.stringify(info));
         alert("Login successful! Welcome to our website");
         e.target.reset();
-        setTimeout(() => navigate("/"), 2000);
-        log(true);
+        setTimeout(() => {navigate("/");window.location.reload(); // Reload the page to update the UI
+        log(true);}, 2000);
         break;
       }
     }
@@ -161,4 +161,5 @@ function Login() {
 }
 
 export default Login;
+
 
