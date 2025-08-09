@@ -7,7 +7,7 @@ import "./Pages.css";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useContext } from "react";
+import { useContext , useEffect } from "react";
 
 // Components
 import { AuthContext } from "../Contexts/AuthContext";
@@ -51,8 +51,9 @@ function Login() {
         localStorage.setItem("loggedUser", JSON.stringify(info));
         alert("Login successful! Welcome to our website");
         e.target.reset();
-        setTimeout(() => {navigate("/");window.location.reload(); // Reload the page to update the UI
-        log(true);}, 2000);
+        setTimeout(() => {navigate("/") ;window.location.reload();}, 2000);
+        log(true);
+        // window.location.reload(); // Reload the page to update the UI
         break;
       }
     }
@@ -63,6 +64,7 @@ function Login() {
       setLoginError(""); // Clear previous errors
     }
   };
+
 
   return (
     <>
@@ -161,5 +163,3 @@ function Login() {
 }
 
 export default Login;
-
-
