@@ -438,15 +438,9 @@ body.dark .footer-divider {
 .footer-payments i:hover {
   opacity: 1;
 }
-.footer .container .row .logo-text {
-  background: linear-gradient(to right, var(--navbar-hover), #4cc9f0) !important;
-  /* -webkit-background-clip: text !important; */
-  /* background-clip: text; */
-  color: transparent !important;
-}
-#footer-logo{
-  background: linear-gradient(to right, var(--navbar-hover), #4cc9f0) !important;
-  /* -webkit-background-clip: text !important; */
-  /* background-clip: text; */
+.footer .logo-text{
+  background: linear-gradient(to right, #4361ee, #4cc9f0) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text;
   color: transparent !important;
 }
