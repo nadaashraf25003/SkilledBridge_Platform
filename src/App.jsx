@@ -8,6 +8,7 @@ import { useContext } from "react";
 
 // Components
 import { ThemeContext } from "./Contexts/ThemeContext";
+import ScrollToTop from './ScrollToTop';
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -20,11 +21,11 @@ function App() {
   return (
     <>
       <Outlet />
+      <ScrollToTop/>
       {/* Back to Top Button  */}
       <a href="#" className="back-to-top active">
         <i className="fas fa-arrow-up" />
       </a>
-
       <div className="theme-switcher">
         <input
           type="checkbox"
