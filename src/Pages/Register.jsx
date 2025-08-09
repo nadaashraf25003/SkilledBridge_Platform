@@ -2,8 +2,8 @@
 import "/src/index.css";
 import "./Pages.css";
 
-// Ract
-import { useState } from "react";
+// React
+import { useState, useEffect } from "react";
 import { object, string, ref, boolean } from "yup";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,15 @@ import Footer from "../Components/Footer";
 function Register() {
   const navigate = useNavigate();
   const [errors, setErrors] = useState({});
+  const [hints, setHints] = useState({});
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    userType: "",
+    termsCheck: false,
+  });
 
   const userSchema = object({
     name: string()
@@ -34,25 +43,51 @@ function Register() {
       .max(18, "Password must be at most 18 characters"),
     confirmPassword: string()
       .required("Please confirm your password")
-      .oneOf([ref("password")], "Passwords must match"), // Fixed reference
+      .oneOf([ref("password")], "Passwords must match"),
     userType: string().required("Please select account type"),
     termsCheck: boolean().oneOf([true], "You must accept the terms"),
   });
 
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
+  };
+
+  useEffect(() => {
+    const validateField = async (fieldName, value) => {
+      try {
+        await userSchema.validateAt(fieldName, { [fieldName]: value });
+        setHints((prev) => ({ ...prev, [fieldName]: "" }));
+      } catch (err) {
+        if (err.path === fieldName) {
+          setHints((prev) => ({ ...prev, [fieldName]: err.message }));
+        }
+      }
+    };
+    if (formData.name) validateField("name", formData.name);
+    if (formData.email) validateField("email", formData.email);
+    if (formData.password) validateField("password", formData.password);
+
+    if (formData.confirmPassword) {
+      try {
+        userSchema.validateSyncAt("confirmPassword", {
+          confirmPassword: formData.confirmPassword,
+          password: formData.password,
+        });
+        setHints((prev) => ({ ...prev, confirmPassword: "" }));
+      } catch (err) {
+        setHints((prev) => ({ ...prev, confirmPassword: err.message }));
+      }
+    }
+  }, [formData]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-
-    const userData = {
-      name: formData.get("userName"),
-      email: formData.get("userEmail"),
-      password: formData.get("userPassword"),
-      confirmPassword: formData.get("confirmPassword"),
-      userType: formData.get("userType"),
-      termsCheck: formData.get("termsCheck") === "on",
-    };
     try {
-      await userSchema.validate(userData, { abortEarly: false });
+      await userSchema.validate(formData, { abortEarly: false });
       setErrors({});
 
       const checkExistEmail = (email) => {
@@ -70,21 +105,16 @@ function Register() {
         return false;
       };
 
-      if (checkExistEmail(userData.email)) {
+      if (checkExistEmail(formData.email)) {
         alert("This email already exists");
         setErrors({ email: "This email already exists" });
         return;
       }
 
-      // Generate a unique ID
       const userID = `User${Date.now().toString()}`;
+      localStorage.setItem(userID, JSON.stringify(formData));
 
-      //  Save user with ID in localStorage
-      localStorage.setItem(userID, JSON.stringify(userData));
-
-      //  Show success and redirect
       alert("Registration successful! Redirecting to login...");
-      e.target.reset(); // Reset the form
       setTimeout(() => navigate("/Login"), 2000);
     } catch (err) {
       const newErrors = {};
@@ -115,12 +145,19 @@ function Register() {
                   Full Name
                 </label>
                 <input
-                  name="userName"
+                  name="name"
                   type="text"
                   className={`form-control ${errors.name ? "is-invalid" : ""}`}
                   id="fullName"
                   placeholder="John Doe"
+                  value={formData.name}
+                  onChange={handleChange}
                 />
+                {hints.name && !errors.name && (
+                  <div style={{ color: "red", fontSize: "13px" }}>
+                    {hints.name}
+                  </div>
+                )}
                 {errors.name && (
                   <div className="invalid-feedback">{errors.name}</div>
                 )}
@@ -130,12 +167,19 @@ function Register() {
                   Email Address
                 </label>
                 <input
-                  name="userEmail"
+                  name="email"
                   type="email"
                   className={`form-control ${errors.email ? "is-invalid" : ""}`}
                   id="userEmail"
                   placeholder="name@example.com"
+                  value={formData.email}
+                  onChange={handleChange}
                 />
+                {hints.email && !errors.email && (
+                  <div style={{ color: "red", fontSize: "13px" }}>
+                    {hints.email}
+                  </div>
+                )}
                 {errors.email && (
                   <div className="invalid-feedback">{errors.email}</div>
                 )}
@@ -145,14 +189,21 @@ function Register() {
                   Password
                 </label>
                 <input
-                  name="userPassword"
+                  name="password"
                   type="password"
                   className={`form-control ${
                     errors.password ? "is-invalid" : ""
                   }`}
                   id="password"
-                  placeholder="At least 8 characters"
+                  placeholder="At least 6 characters"
+                  value={formData.password}
+                  onChange={handleChange}
                 />
+                {hints.password && !errors.password && (
+                  <div style={{ color: "red", fontSize: "13px" }}>
+                    {hints.password}
+                  </div>
+                )}
                 {errors.password && (
                   <div className="invalid-feedback">{errors.password}</div>
                 )}
@@ -169,7 +220,14 @@ function Register() {
                   }`}
                   id="confirmPassword"
                   placeholder="Confirm your password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
                 />
+                {hints.confirmPassword && !errors.confirmPassword && (
+                  <div style={{ color: "red", fontSize: "13px" }}>
+                    {hints.confirmPassword}
+                  </div>
+                )}
                 {errors.confirmPassword && (
                   <div className="invalid-feedback">
                     {errors.confirmPassword}
@@ -186,7 +244,8 @@ function Register() {
                     errors.userType ? "is-invalid" : ""
                   }`}
                   id="userType"
-                  defaultValue=""
+                  value={formData.userType}
+                  onChange={handleChange}
                 >
                   <option value="" disabled>
                     Select account type
@@ -206,6 +265,8 @@ function Register() {
                   }`}
                   type="checkbox"
                   id="termsCheck"
+                  checked={formData.termsCheck}
+                  onChange={handleChange}
                 />
                 <label className="form-check-label" htmlFor="termsCheck">
                   I agree to the <a href="#">Terms of Service</a> and{" "}
